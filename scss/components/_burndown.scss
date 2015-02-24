@@ -1,0 +1,60 @@
+//
+// View Cluster Traffic
+//
+
+.burndown.overview {
+    padding: 0px;
+    margin: 20px 0px;
+
+    .is-chart.burndown {
+        margin: 25px 0px;
+        border-top: 1px solid $sectionBorder;
+
+        .chart {
+            height: 600px;
+        }
+
+        .info {
+
+            .series {
+
+                &.series-option-ratio .value {
+                    font-size: 30px;
+                    font-color: white;
+                }
+
+                &.series-option-ratio .value {
+                    font-size: 24px;
+
+                    &.series-ratio-positive {
+                        color: #64ff54;
+                    }
+
+                    &.series-ratio-negative {
+                        color: #ff5454;
+                    }
+                }
+            }
+        }
+
+        .legend {
+
+            .series {
+                &.series-name-ideal .line {
+                    background-color: #88ee88;
+                }
+
+                &.series-name-burndown .line {
+                    background-color: #67b6ff;
+                }
+
+                &.series-name-today .line {
+                    background-color: #ff9c3b;
+                }
+            }
+
+        }
+
+    }
+
+}

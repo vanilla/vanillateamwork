@@ -1,0 +1,31 @@
+{{#burndown}}
+    <div class="burndown analytics is-chart overview"
+         data-tag="burndown"
+         data-url="/burndown/burndowndata/{{week}}"
+         data-refresh="true"
+         data-interval="120">
+        <div class="chart-widget">
+            <div class="info">
+                <div class="title">
+                    <div class="name">sprint burndown</div>
+                    <div class="context">locale <span class="timezone">utc</span></div>
+                </div>
+                <div class="legend">
+                    <div class="series series-name-ideal" data-series="ideal">
+                        <div class="line"></div>
+                        <div class="name">ideal</div>
+                    </div>
+                    <div class="series series-name-burndown" data-series="burndown">
+                        <div class="line"></div>
+                        <div class="name">burned down</div>
+                    </div>
+                    <div class="series series-name-today" data-series="burndown">
+                        <div class="line"></div>
+                        <div class="name">burning down</div>
+                    </div>
+                </div>
+            </div>
+            <div id="burndown-analytics" class="chart"></div>
+        </div>
+    </div>
+{{/burndown}}

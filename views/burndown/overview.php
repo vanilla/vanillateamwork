@@ -1,0 +1,28 @@
+<?php if ($this->data('burndown')): ?>
+
+    <?php
+    $week = $this->data('burndown.startdate');
+    ?>
+
+    <div class="burndown overview js-burndown is-burndown is-active-entity" data-week="<?php echo $week; ?>">
+
+        <!-- analytics -->
+        <?php echo $this->mustache('viewburndown'); ?>
+
+        <!-- /burndown -->
+    </div>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            burndown.start('overview');
+        });
+    </script>
+
+<?php else: ?>
+
+    <h1>view burndown</h1>
+    <div class="context">
+        no data
+    </div>
+
+<?php endif; ?>
