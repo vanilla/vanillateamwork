@@ -190,7 +190,7 @@ class Teamwork {
             $request->parameter('includeCompletedTasks', true);
         }
 
-        $request->cache(60);
+        $request->cache(3600);
         $request->flushCache($fresh);
 
         $tasks = $request->send();
