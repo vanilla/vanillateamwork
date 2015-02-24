@@ -30,10 +30,10 @@ class VanillaTeamworkHooks implements Gdn_IPlugin {
         // Add group
         $menu->addItem('Teamwork', T('Teamwork'), 'teamwork', array('class' => 'Teamwork'));
         // Add group URL
-        $menu->addLink('Teamwork', false, 'teamwork', 'vfteamwork.burndown.view');
+        $menu->addLink('Teamwork', false, 'burndown', 'vfteamwork.burndown.view');
 
         // Items
-        $menu->addLink('Teamwork', 'Burndown', 'teamwork/burndown', 'vfteamwork.burndown.view');
+        $menu->addLink('Teamwork', 'Burndown', '/burndown', 'vfteamwork.burndown.view');
     }
 
     /**

@@ -33,7 +33,7 @@ class BurndownController extends VanillaConsoleController {
         //$this->addCssFile('flyout.css');
         $this->addCssFile('inform.css');
 
-        $this->addBreadcrumb('Teamwork', url('/teamwork'));
+        $this->addBreadcrumb('Teamwork', url('/burndown'));
 
         $this->form = new Gdn_Form();
         $this->Form = &$this->form;
