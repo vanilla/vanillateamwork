@@ -177,8 +177,10 @@ class Teamwork {
      *
      * @param DateTime $startDate
      * @param DateTime $endDate
+     *
+     * @param boolean $fresh optional. force the cache to be cleared. default false.
      */
-    public static function tearTasks($startDate, $endDate, $completed = true) {
+    public static function tearTasks($startDate, $endDate, $completed = true, $fresh = false) {
         $request = Teamwork::request('get', 'tasks', [
             'startdate' => $startDate->format('Ymd'),
             'enddate' => $endDate->format('Ymd')
@@ -189,6 +191,7 @@ class Teamwork {
         }
 
         $request->cache(60);
+        $request->flushCache($fresh);
 
         $tasks = $request->send();
         if (!$request->responseClass('200')) {
@@ -202,8 +205,9 @@ class Teamwork {
      * Get parsed breakdown for a given week
      *
      * @param string $week optional. specify a date to get breakdown for that week.
+     * @param boolean $fresh optional. force the cache to be cleared. default false.
      */
-    public static function parseWeek($week = null) {
+    public static function parseWeek($week = null, $fresh = false) {
 
         if (is_null($week)) {
             $startDate = Teamwork::time('monday this week');
@@ -229,7 +233,7 @@ class Teamwork {
         $endDate->add($endInterval);
         $endDate->setTime(23, 59, 59);
 
-        $tt = Teamwork::tearTasks($startDate, $endDate);
+        $tt = Teamwork::tearTasks($startDate, $endDate, true, $fresh);
 
         // Prepare data structure
         $breakdown = [

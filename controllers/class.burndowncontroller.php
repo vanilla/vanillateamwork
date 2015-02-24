@@ -88,6 +88,26 @@ class BurndownController extends VanillaConsoleController {
     }
 
     /**
+     *
+     * @param type $week
+     */
+    public function tasks($week = null) {
+        $this->permission('vfteamwork.burndown.view');
+        $this->deliveryMethod(DELIVERY_METHOD_JSON);
+        $this->deliveryType(DELIVERY_TYPE_DATA);
+
+        $burndown = Teamwork::parseWeek($week);
+        $this->setData('burndown', $burndown);
+
+        $startDate = Teamwork::time($burndown['startdate']);
+        $endDate = Teamwork::time($burndown['enddate']);
+        $tasks = Teamwork::tearTasks($startDate, $endDate);
+        $this->setData('tasks', $tasks);
+
+        $this->render();
+    }
+
+    /**
      * Burndown analytics
      *
      * @throws Exception
@@ -146,12 +166,13 @@ class BurndownController extends VanillaConsoleController {
             $series[$seriesStartKey][$dayIndex] = $day['ideal']['end-minutes'] / 60;
 
             // Add burned-down time
+            $burned += $day['burned-down'];
+            $burnedTo = ($day['ceiling-minutes'] - $burned) / 60;
             if ($dayKey < $todayKey) {
-                $burned += $day['burned-down'];
-                $burnSeries[$dayIndex] = ($day['ceiling-minutes'] - $burned) / 60;
+                $burnSeries[$dayIndex] = $burnedTo;
             } else if ($dayKey == $todayKey) {
                 $todaySeries[$dayIndex-1] = $day['ceiling-minutes'] / 60;
-                $todaySeries[$dayIndex] = ($day['ceiling-minutes'] - $burned) / 60;
+                $todaySeries[$dayIndex] = $burnedTo;
             }
         }
 
@@ -209,4 +230,18 @@ class BurndownController extends VanillaConsoleController {
 
         $this->render();
     }
+
+    /**
+     * Reset stored data for current week
+     *
+     */
+    public function reset() {
+        $this->deliveryMethod(DELIVERY_METHOD_JSON);
+        $this->deliveryType(DELIVERY_TYPE_DATA);
+
+        Teamwork::parseWeek(null, true);
+
+        $this->render();
+    }
+
 }
