@@ -141,7 +141,9 @@ class BurndownController extends VanillaConsoleController {
         $burnSeries = array_fill(0, $increments, null);
         $burnSeries[0] = $burndown['initial-minutes'] / 60;
 
+        $haveToday = false;
         if ($today >= $startDate && $today <= $endDate) {
+            $haveToday = true;
             $todaySeries = array_fill(0, $increments, null);
         }
 
@@ -177,7 +179,9 @@ class BurndownController extends VanillaConsoleController {
         }
 
         $series['burndown'] = $burnSeries;
-        $series['today'] = $todaySeries;
+        if ($haveToday) {
+            $series['today'] = $todaySeries;
+        }
 
         $dayInterval = Console::interval('1d');
         $endDate = Console::time($burndown['enddate']);
