@@ -32,3 +32,35 @@
 .burndown.overview .is-chart.burndown .legend .series.series-name-today .line {
   background-color: #ff9c3b;
 }
+.burndown.overview .is-chart.burndown .legend .scope-tooltips {
+  margin-top: 40px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events {
+  text-align: left;
+  width: 180px;
+  padding: 0px;
+  margin: 0px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .tooltip-title {
+  color: #67b6ff;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .date {
+  text-align: left;
+  padding-bottom: 6px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .events .event {
+  font-size: 12px;
+  padding: 2px 0px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .events .event .project-name {
+  font-weight: bold;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .events .event .project-info {
+  font-style: italic;
+  font-size: 11px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .events .event .project-hours {
+  color: #67b6ff;
+}

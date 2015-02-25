@@ -78,6 +78,38 @@ var burndown = {
 
         "teamwork/burndown": {
             base: "bluePrecision",
+            tooltips: function(env, series, index, value, label) {
+                console.log(env);
+
+                var eventKey = env.analytics.data.events.keys[index];
+                if (!env.analytics.data.events.series.hasOwnProperty(eventKey)) {
+                    return null;
+                }
+
+                var events = env.analytics.data.events.series[eventKey];
+                var eventDate = events.date;
+                var eventList = '';
+
+                jQuery.each(events.events, function(projectid, project){
+                    var hours = Math.round(project.minutes / 60,1);
+                    var hoursText = (hours === 1) ? 'hour' : 'hours';
+                    eventList += "<div class=\"event\">\n\
+    <span class=\"project-name\">"+project.project+"</span> (<span class=\"project-info\"><span class=\"project-hours\">"+hours+" "+hoursText+"</span></span>)\
+</div>";
+                });
+
+                var tooltiptext = "<div class=\"chart-tooltip scope-events\">\n\
+    <div class=\"tooltip-title\">scope increases</div>\n\
+    <div class=\"date\">" + eventDate + "</div>\n\
+    <div class=\"events\">\
+        {events}\
+    </div>\
+</div>";
+
+                env.analytics.widget.find('.scope-tooltips').html(tooltiptext.replace('{events}', eventList));
+
+                return null;
+            },
             axis: {
                 x: {
                     labelsFormatHandler: function(label, index) {
@@ -109,6 +141,18 @@ var burndown = {
                     stroke: "white",
                     size: 0,
                     "stroke-width": 0
+                },
+                tooltip: {
+                    height: 300,
+                    width: 180,
+                    padding: 0,
+                    roundedCorners: 0,
+                    frameProps: {
+                        opacity: 1,
+                        fill: null,
+                        stroke: "#ffffff",
+                        "stroke-width": 0
+                    }
                 }
             },
             series: {
@@ -119,7 +163,8 @@ var burndown = {
                     plotProps: {
                         "stroke-width": 4,
                         stroke: "#67b6ff"
-                    }
+                    },
+                    tooltip: null
                 },
                 todaySeries: {
                     color: "#ff9c3b",
@@ -129,10 +174,16 @@ var burndown = {
                         stroke: "#ff9c3b",
                         "stroke-width": 4,
                         "stroke-dasharray": '.'
-                    }
+                    },
+                    tooltip: null
                 }
             },
             features: {
+                tooltip: {
+                    positionHandler: function(env, tooltipConf, mouseAreaData, suggestedX, suggestedY) {
+                        return [-180,300];
+                    }
+                },
                 grid: {
                     forceBorder: [false, false, true, true],
                     nx: 5,

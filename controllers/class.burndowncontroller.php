@@ -151,8 +151,10 @@ class BurndownController extends VanillaConsoleController {
 
         $labels = [];
         $burned = 0;
+        $dayKeys = [];
         foreach ($burndown['days'] as $dayKey => $day) {
             $labels[] = $day['label'];
+            $dayKeys[] = $dayKey;
 
             $seriesStartKey = "ideal-{$dayKey}";
             if (!array_key_exists($seriesStartKey, $series)) {
@@ -231,6 +233,13 @@ class BurndownController extends VanillaConsoleController {
         }
 
         $this->setData('data', $output);
+
+        // Attach spike events
+
+        $this->setData('events', [
+            'keys' => $dayKeys,
+            'series' => $burndown['events']
+        ]);
 
         $this->render();
     }

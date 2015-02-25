@@ -230,7 +230,8 @@ class Teamwork {
             'spike-minutes' => 0,
             'estimated-minutes' => 0,
             'burned-down' => 0,
-            'days' => []
+            'days' => [],
+            'events' => []
         ];
 
         // Add day keys with placeholder data structures
@@ -315,6 +316,8 @@ class Teamwork {
                 $burndown['days'][$taskStartKey]['ideal']['spike-minutes'] += $task['estimated-minutes'];
                 $burndown['spike-minutes'] += $task['estimated-minutes'];
 
+                Teamwork::addEvent($burndown, $taskStartDate, $task);
+
             // Task was allocated during sprint
             } else {
                 $burndown['initial-minutes'] += $task['estimated-minutes'];
@@ -370,7 +373,7 @@ class Teamwork {
                 $updated = $update->send();
                 $adjustment['response'] = $updated;
             }
-            
+
         }
 
         return $burndown;
@@ -414,6 +417,37 @@ class Teamwork {
             'startdate' => $startDate,
             'enddate' => $endDate
         ];
+    }
+
+    /**
+     * Add a scope change event
+     *
+     * @param array $burndown
+     * @param string $date
+     * @param array $task
+     */
+    public static function addEvent(&$burndown, $date, $task) {
+        $key = $date->format('Ymd');
+        if (!array_key_exists($key, $burndown['events'])) {
+            $burndown['events'][$key] = [
+                'date' => $date->format('Y-m-d H:i:s'),
+                'events' => []
+            ];
+        }
+        $eventDay = &$burndown['events'][$key]['events'];
+
+        $projectID = $task['project-id'];
+        if (!array_key_exists($projectID, $eventDay)) {
+            $eventDay[$projectID] = [
+                'project' => $task['project-name'],
+                'project-id' => $projectID,
+                'events' => 0,
+                'minutes' => 0
+            ];
+        }
+
+        $eventDay[$projectID]['minutes'] += $task['estimated-minutes'];
+        $eventDay[$projectID]['events']++;
     }
 
 }

@@ -10,6 +10,14 @@
                     <div class="name">sprint burndown</div>
                     <div class="context">locale <span class="timezone">utc</span></div>
                 </div>
+                <div class="series series-name-startdate">
+                    <div class="value">{{startdate}}</div>
+                    <div class="label">start date</div>
+                </div>
+                <div class="series series-name-enddate">
+                    <div class="value">{{enddate}}</div>
+                    <div class="label">end date</div>
+                </div>
                 <div class="legend">
                     <div class="series series-name-ideal" data-series="ideal">
                         <div class="line"></div>
@@ -23,6 +31,7 @@
                         <div class="line"></div>
                         <div class="name">burning down</div>
                     </div>
+                    <div class="scope-tooltips"></div>
                 </div>
             </div>
             <div id="burndown-analytics" class="chart"></div>

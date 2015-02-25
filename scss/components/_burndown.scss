@@ -53,6 +53,50 @@
                 }
             }
 
+            .scope-tooltips {
+                margin-top: 40px;
+
+                .chart-tooltip.scope-events {
+                    text-align: left;
+                    width: 180px;
+                    padding: 0px;
+                    margin: 0px;
+
+                    .tooltip-title {
+                        color: $highlightText;
+                        text-transform: uppercase;
+                        padding-bottom: 4px;
+                    }
+
+                    .date {
+                        text-align: left;
+                        padding-bottom: 6px;
+                    }
+
+                    .events {
+                        .event {
+                            font-size: 12px;
+                            padding: 2px 0px;
+
+                            .project-name {
+                                font-weight: bold;
+                            }
+                            .project-info {
+                                font-style: italic;
+                                font-size: 11px;
+                            }
+
+                            .project-events {
+
+                            }
+                            .project-hours {
+                                color: $highlightText;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
     }
