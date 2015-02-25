@@ -171,7 +171,7 @@ class BurndownController extends VanillaConsoleController {
             if ($dayKey < $todayKey) {
                 $burnSeries[$dayIndex] = $burnedTo;
             } else if ($dayKey == $todayKey) {
-                $todaySeries[$dayIndex-1] = $day['ceiling-minutes'] / 60;
+                $todaySeries[$dayIndex-1] = $burnSeries[$dayIndex-1];
                 $todaySeries[$dayIndex] = $burnedTo;
             }
         }
