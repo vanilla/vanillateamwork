@@ -90,19 +90,25 @@ var burndown = {
                 var eventDate = events.date;
                 var eventList = '';
 
+                var totalHours = 0;
                 jQuery.each(events.events, function(projectid, project){
                     var hours = Math.round(project.minutes / 60,1);
+                    totalHours += hours;
                     var hoursText = (hours === 1) ? 'hour' : 'hours';
                     eventList += "<div class=\"event\">\n\
     <span class=\"project-name\">"+project.project+"</span> (<span class=\"project-info\"><span class=\"project-hours\">"+hours+" "+hoursText+"</span></span>)\
 </div>";
                 });
 
+                var totalHoursText = totalHours === 1 ? 'hour' : 'hours';
                 var tooltiptext = "<div class=\"chart-tooltip scope-events\">\n\
     <div class=\"tooltip-title\">scope increases</div>\n\
     <div class=\"date\">" + eventDate + "</div>\n\
     <div class=\"events\">\
         {events}\
+    </div>\
+    <div class=\"scope-summary\">\
+        Total: <span class=\"summary-hours\">"+totalHours+" "+totalHoursText+"</span>\
     </div>\
 </div>";
 

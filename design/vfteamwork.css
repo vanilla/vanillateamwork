@@ -64,3 +64,9 @@
 .burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .events .event .project-hours {
   color: #67b6ff;
 }
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .scope-summary {
+  margin-top: 10px;
+}
+.burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .scope-summary .summary-hours {
+  color: #67b6ff;
+}

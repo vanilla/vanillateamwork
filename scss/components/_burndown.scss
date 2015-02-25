@@ -94,6 +94,14 @@
                             }
                         }
                     }
+
+                    .scope-summary {
+                        margin-top: 10px;
+
+                        .summary-hours {
+                            color: $highlightText;
+                        }
+                    }
                 }
             }
 
