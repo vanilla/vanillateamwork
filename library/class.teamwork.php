@@ -430,7 +430,7 @@ class Teamwork {
         $key = $date->format('Ymd');
         if (!array_key_exists($key, $burndown['events'])) {
             $burndown['events'][$key] = [
-                'date' => $date->format('Y-m-d H:i:s'),
+                'date' => $date->format('l, M jS'),
                 'events' => []
             ];
         }

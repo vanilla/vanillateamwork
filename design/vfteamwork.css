@@ -49,6 +49,8 @@
 .burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .date {
   text-align: left;
   padding-bottom: 6px;
+  font-weight: normal;
+  text-transform: uppercase;
 }
 .burndown.overview .is-chart.burndown .legend .scope-tooltips .chart-tooltip.scope-events .events .event {
   font-size: 12px;
