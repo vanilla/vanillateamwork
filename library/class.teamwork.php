@@ -207,36 +207,23 @@ class Teamwork {
      * @param string $week optional. specify a date to get breakdown for that week.
      * @param boolean $fresh optional. force the cache to be cleared. default false.
      */
-    public static function parseWeek($week = null, $fresh = false) {
+    public static function getBurndown($week = null, $fresh = false) {
 
         if (is_null($week)) {
-            $startDate = Teamwork::time('monday this week');
-        } else {
-            $startDate = Teamwork::time($week);
-        }
-        if (!$startDate) {
-            return null;
+            $week = 'monday this week';
         }
 
-        // Adjust startdate to fall on the Monday
-        $day = $startDate->format('N');
-        if ($day > 1) {
-            $days = $day - 1;
-            $interval = Teamwork::interval("{$days}d");
-            $startDate->sub($interval);
+        $dates = Teamwork::getWeek($week);
+        if (!$dates) {
+            return false;
         }
-        $startDate->setTime(0, 0, 0);
-
-        // Adjust enddate to fall on Friday at midnight
-        $endInterval = Teamwork::interval('4d');
-        $endDate = clone $startDate;
-        $endDate->add($endInterval);
-        $endDate->setTime(23, 59, 59);
+        $startDate = $dates['startdate'];
+        $endDate = $dates['enddate'];
 
         $tt = Teamwork::tearTasks($startDate, $endDate, true, $fresh);
 
         // Prepare data structure
-        $breakdown = [
+        $burndown = [
             'startdate' => $startDate->format('Y-m-d'),
             'enddate' => $endDate->format('Y-m-d'),
             'initial-minutes' => 0,
@@ -255,7 +242,7 @@ class Teamwork {
             }
             $dayKey = $walkDate->format('Ymd');
 
-            $breakdown['days'][$dayKey] = [
+            $burndown['days'][$dayKey] = [
                 'key' => $dayKey,
                 'index' => $i,
                 'label' => $walkDate->format('l'),
@@ -267,6 +254,9 @@ class Teamwork {
                 'burned-down' => 0
             ];
         }
+
+        // Keep track of things to do
+        $adjustments = [];
 
         $startDayKey = $startDate->format('Ymd');
         $endDayKey = $endDate->format('Ymd');
@@ -292,31 +282,50 @@ class Teamwork {
                 continue;
             }
 
+            if ($task['completed']) {
+                $taskCompletedDate = Teamwork::time($task['completed_on']);
+                $taskCompletedKey = $taskCompletedDate->format('Ymd');
+
+                // Task was completed in a previous sprint
+                if ($taskCompletedDate < $startDate) {
+
+                    // If this is a refresh, adjust task into correct sprint slot
+                    if ($fresh) {
+                        $sprintWeek = Teamwork::getWeek($taskCompletedDate);
+                        $adjustments[] = [
+                            'taskid' => $task['id'],
+                            'modify' => [
+                                'due-date' => $sprintWeek['enddate']->format('Ymd')
+                            ]
+                        ];
+                    }
+
+                    continue;
+                }
+            }
+
             // Add to total minutes
-            $breakdown['estimated-minutes'] += $task['estimated-minutes'];
+            $burndown['estimated-minutes'] += $task['estimated-minutes'];
 
             $taskStartDate = Teamwork::time($task['created-on']);
             $taskStartKey = $taskStartDate->format('Ymd');
 
             // Task is a scope increase
             if ($taskStartKey > $startDayKey) {
-                $breakdown['days'][$taskStartKey]['ideal']['spike-minutes'] += $task['estimated-minutes'];
-                $breakdown['spike-minutes'] += $task['estimated-minutes'];
+                $burndown['days'][$taskStartKey]['ideal']['spike-minutes'] += $task['estimated-minutes'];
+                $burndown['spike-minutes'] += $task['estimated-minutes'];
 
             // Task was allocated during sprint
             } else {
-                $breakdown['initial-minutes'] += $task['estimated-minutes'];
+                $burndown['initial-minutes'] += $task['estimated-minutes'];
             }
 
             // Task is burned down
             if ($task['completed']) {
 
-                $taskCompletedDate = Teamwork::time($task['completed_on']);
-                $taskCompletedKey = $taskCompletedDate->format('Ymd');
-
                 if ($taskCompletedKey >= $startDayKey && $taskCompletedKey <= $endDayKey) {
-                    $breakdown['days'][$taskCompletedKey]['burned-down'] += $task['estimated-minutes'];
-                    $breakdown['burned-down'] += $task['estimated-minutes'];
+                    $burndown['days'][$taskCompletedKey]['burned-down'] += $task['estimated-minutes'];
+                    $burndown['burned-down'] += $task['estimated-minutes'];
                 }
 
             }
@@ -324,11 +333,11 @@ class Teamwork {
         }
 
         // Parse burndown and spread minutes over days
-        $days = count($breakdown['days']);
-        $carry = $breakdown['initial-minutes'];
+        $days = count($burndown['days']);
+        $carry = $burndown['initial-minutes'];
         $onDay = 0;
-        $max = $breakdown['initial-minutes'];
-        foreach ($breakdown['days'] as $dayKey => &$day) {
+        $max = $burndown['initial-minutes'];
+        foreach ($burndown['days'] as $dayKey => &$day) {
             $max += $day['ideal']['spike-minutes'];
             $day['ceiling-minutes'] = $max;
 
@@ -348,7 +357,63 @@ class Teamwork {
             $onDay++;
         }
 
-        return $breakdown;
+        // Make updates
+        if ($fresh && count($adjustments)) {
+
+            $burndown['adjustments'] = $adjustments;
+            foreach ($burndown['adjustments'] as &$adjustment) {
+                $taskID = $adjustment['taskid'];
+                $modify = $adjustment['modify'];
+
+                $update = Teamwork::request('put', "/tasks/{$taskID}.json");
+                $update->parameter('todo-item', $modify);
+                $updated = $update->send();
+                $adjustment['response'] = $updated;
+            }
+            
+        }
+
+        return $burndown;
+    }
+
+    /**
+     * Get the week for a given time
+     *
+     * @param string|DateTime $time
+     * @return array
+     */
+    public static function getWeek($time) {
+        if (!($time instanceof DateTime)) {
+            $timeDate = Teamwork::time($time);
+            if (!$timeDate) {
+                return false;
+            }
+        } else {
+            $timeDate = $time;
+        }
+
+        $startDate = clone $timeDate;
+
+        // Adjust startdate to fall on the Monday
+        $day = $startDate->format('N');
+        if ($day > 1) {
+            $days = $day - 1;
+            $interval = Teamwork::interval("{$days}d");
+            $startDate->sub($interval);
+        }
+        $startDate->setTime(0, 0, 0);
+
+        // Adjust enddate to fall on Friday at midnight
+        $endInterval = Teamwork::interval('4d');
+        $endDate = clone $startDate;
+        $endDate->add($endInterval);
+        $endDate->setTime(23, 59, 59);
+
+        return [
+            'time' => $timeDate,
+            'startdate' => $startDate,
+            'enddate' => $endDate
+        ];
     }
 
 }

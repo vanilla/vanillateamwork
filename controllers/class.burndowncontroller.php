@@ -81,7 +81,7 @@ class BurndownController extends VanillaConsoleController {
 
         $this->addJsFile('burndown/burndown.js');
 
-        $burndown = Teamwork::parseWeek($week);
+        $burndown = Teamwork::getBurndown($week);
         $this->setData('burndown', $burndown);
 
         $this->render();
@@ -96,7 +96,7 @@ class BurndownController extends VanillaConsoleController {
         $this->deliveryMethod(DELIVERY_METHOD_JSON);
         $this->deliveryType(DELIVERY_TYPE_DATA);
 
-        $burndown = Teamwork::parseWeek($week);
+        $burndown = Teamwork::getBurndown($week);
         $this->setData('burndown', $burndown);
 
         $startDate = Teamwork::time($burndown['startdate']);
@@ -125,7 +125,7 @@ class BurndownController extends VanillaConsoleController {
 
         // API for data
 
-        $burndown = Teamwork::parseWeek($week);
+        $burndown = Teamwork::getBurndown($week);
         $this->setData('burndown', $burndown);
 
         $startDate = Console::time($burndown['startdate']);
@@ -243,7 +243,24 @@ class BurndownController extends VanillaConsoleController {
         $this->deliveryMethod(DELIVERY_METHOD_JSON);
         $this->deliveryType(DELIVERY_TYPE_DATA);
 
-        Teamwork::parseWeek(null, true);
+        // Check if we're current
+        $refreshingMutexKey = 'teamwork.burndown.refreshing';
+        $refreshing = Gdn::cache()->get($refreshingMutexKey);
+        if (!$refreshing) {
+
+            // Wait 300 seconds
+            Gdn::cache()->store($refreshingMutexKey, true, [
+                Gdn_Cache::FEATURE_EXPIRY => 300
+            ]);
+
+            // Refresh the cache
+            $burndown = Teamwork::getBurndown(null, true);
+            $this->setData('burndown', $burndown);
+
+            // Shortcircuit refresh wait if successful completion
+            Gdn::cache()->remove($refreshingMutexKey);
+
+        }
 
         $this->render();
     }
