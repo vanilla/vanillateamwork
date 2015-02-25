@@ -79,10 +79,10 @@ var burndown = {
         "teamwork/burndown": {
             base: "bluePrecision",
             tooltips: function(env, series, index, value, label) {
-                console.log(env);
 
                 var eventKey = env.analytics.data.events.keys[index];
                 if (!env.analytics.data.events.series.hasOwnProperty(eventKey)) {
+                    env.analytics.widget.find('.scope-tooltips').html('');
                     return null;
                 }
 
