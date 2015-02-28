@@ -220,6 +220,14 @@ class Teamwork {
         $startDate = $dates['startdate'];
         $endDate = $dates['enddate'];
 
+        $drawDate = clone $endDate;
+        $drawDate->add(Console::interval('1d'));
+        $drawDayKey = $drawDate->format('Ymd');
+
+        $capDate = clone $endDate;
+        $capDate->add(Console::interval('2d'));
+        $capDayKey = $capDate->format('Ymd');
+
         $tt = Teamwork::tearTasks($startDate, $endDate, true, $fresh);
 
         // Prepare data structure
@@ -326,8 +334,14 @@ class Teamwork {
             // Task is burned down
             if ($task['completed']) {
 
-                if ($taskCompletedKey >= $startDayKey && $taskCompletedKey <= $endDayKey) {
-                    $burndown['days'][$taskCompletedKey]['burned-down'] += $task['estimated-minutes'];
+                $taskCountedKey = $taskCompletedKey;
+
+                if ($taskCompletedKey >= $startDayKey && $taskCompletedKey <= $capDayKey) {
+                    // Handle tasks completed over the weekend
+                    if ($taskCountedKey > $endDayKey) {
+                        $taskCountedKey = $endDayKey;
+                    }
+                    $burndown['days'][$taskCountedKey]['burned-down'] += $task['estimated-minutes'];
                     $burndown['burned-down'] += $task['estimated-minutes'];
                 }
 

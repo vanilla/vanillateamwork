@@ -128,8 +128,18 @@ class BurndownController extends VanillaConsoleController {
         $burndown = Teamwork::getBurndown($week);
         $this->setData('burndown', $burndown);
 
-        $startDate = Console::time($burndown['startdate']);
-        $endDate = Console::time($burndown['enddate']);
+        $startDate = Console::time($burndown['startdate'].' 23:59:59');
+        $startKey = $startDate->format('Ymd');
+        $endDate = Console::time($burndown['enddate'].' 23:59:59');
+        $endKey = $endDate->format('Ymd');
+
+        $drawDate = clone $endDate;
+        $drawDate->add(Console::interval('1d'));
+        $drawKey = $drawDate->format('Ymd');
+
+        $capDate = clone $endDate;
+        $capDate->add(Console::interval('2d'));
+        $capKey = $capDate->format('Ymd');
 
         // Prepare response
 
@@ -142,7 +152,7 @@ class BurndownController extends VanillaConsoleController {
         $burnSeries[0] = $burndown['initial-minutes'] / 60;
 
         $haveToday = false;
-        if ($today >= $startDate && $today <= $endDate) {
+        if ($todayKey >= $startKey && $todayKey <= $drawKey) {
             $haveToday = true;
             $todaySeries = array_fill(0, $increments, null);
         }
