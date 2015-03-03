@@ -4,10 +4,13 @@
     $week = $this->data('burndown.startdate');
     ?>
 
-    <div class="burndown overview js-burndown is-burndown is-active-entity" data-week="<?php echo $week; ?>">
+    <div class="burndown overview js-burndown is-burndown is-active-entity" data-burndownid="<?php echo $week; ?>">
 
         <!-- analytics -->
         <?php echo $this->mustache('viewburndown'); ?>
+
+        <!-- completion -->
+        <?php echo $this->mustache('viewcompletion'); ?>
 
         <!-- /burndown -->
     </div>

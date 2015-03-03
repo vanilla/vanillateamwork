@@ -239,7 +239,8 @@ class Teamwork {
             'estimated-minutes' => 0,
             'burned-down' => 0,
             'days' => [],
-            'events' => []
+            'events' => [],
+            'workers' => []
         ];
 
         // Add day keys with placeholder data structures
@@ -330,6 +331,9 @@ class Teamwork {
             } else {
                 $burndown['initial-minutes'] += $task['estimated-minutes'];
             }
+
+            // Track task progress per worker
+            Teamwork::addWorker($burndown, $task);
 
             // Task is burned down
             if ($task['completed']) {
@@ -462,6 +466,33 @@ class Teamwork {
 
         $eventDay[$projectID]['minutes'] += $task['estimated-minutes'];
         $eventDay[$projectID]['events']++;
+    }
+
+    /**
+     * Add a worker to the output, or update worker totals
+     *
+     * @param array $burndown
+     * @param array $task
+     */
+    public static function addWorker(&$burndown, $task) {
+        $workerID = $task['responsible-party-id'];
+        if (!array_key_exists($workerID, $burndown['workers'])) {
+            $burndown['workers'][$workerID] = [
+                'worker' => $task['responsible-party-summary'],
+                'worker-id' => $workerID,
+                'estimated-minutes' => 0,
+                'completed-minutes' => 0,
+                'tasks' => 0
+            ];
+        }
+        $worker = &$burndown['workers'][$workerID];
+
+        $worker['tasks']++;
+        $worker['estimated-minutes'] += $task['estimated-minutes'];
+
+        if ($task['completed']) {
+            $worker['completed-minutes'] += $task['estimated-minutes'];
+        }
     }
 
 }

@@ -73,3 +73,18 @@
   color: #67b6ff;
   font-size: 11px;
 }
+.burndown.overview .worker-completion .worker {
+  margin: 2px 0px;
+}
+.burndown.overview .worker-completion .worker .worker-name {
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+  min-width: 90px;
+}
+.burndown.overview .worker-completion .worker .completed-hours {
+  color: #67b6ff;
+}
+.burndown.overview .worker-completion .worker .completed-ratio {
+  color: #67b6ff;
+}

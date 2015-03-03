@@ -1,0 +1,10 @@
+<div class="section worker-completion js-mustache" data-week="{{burndown.startdate}}" data-template="burndown/viewcompletion" data-parameters='{"burndown":"burndown", "workers":"workers"}'>
+    <div class="completion-title title">sprint progress</div>
+    <div class="workers">
+        {{#workers}}
+            <div class="worker" data-workerid="{{worker-id}}">
+                <span class="worker-name">{{worker}}</span> <span class="completed-hours">{{completed}}</span> / <span class="estimated-hours">{{estimated}}</span> = <span class="completed-ratio">{{ratio}}%</span>
+            </div>
+        {{/workers}}
+    </div>
+</div>

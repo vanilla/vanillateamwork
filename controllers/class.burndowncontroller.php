@@ -62,6 +62,7 @@ class BurndownController extends VanillaConsoleController {
 
         // Add vfconsole js libaries
         $this->addJsFile('active.js', 'vfconsole');
+        $this->addJsFile('activebar.js', 'vfconsole');
         $this->addJsFile('graphing.js', 'vfconsole');
         $this->addJsFile('analytics.js', 'vfconsole');
 
@@ -78,6 +79,7 @@ class BurndownController extends VanillaConsoleController {
 
         // Add Mustache templates for js usage
         $this->addTemplateFile('viewburndown');
+        $this->addTemplateFile('viewcompletion');
 
         $this->addJsFile('burndown/burndown.js');
 
@@ -250,6 +252,20 @@ class BurndownController extends VanillaConsoleController {
             'keys' => $dayKeys,
             'series' => $burndown['events']
         ]);
+
+        // Attach worker events
+
+        $workers = [];
+        foreach ($burndown['workers'] as $workerID => $worker) {
+            $worker['estimated'] = round($worker['estimated-minutes'] / 60,1);
+            $worker['completed'] = round($worker['completed-minutes'] / 60,1);
+
+            $worker['estimated-text'] = $worker['estimated'] == 1 ? 'hour' : 'hours';
+            $worker['completed-text'] = $worker['completed'] == 1 ? 'hour' : 'hours';
+            $worker['ratio'] = round(($worker['completed'] / $worker['estimated']) * 100,0);
+            $workers[] = $worker;
+        }
+        $this->setData('workers', $workers);
 
         $this->render();
     }

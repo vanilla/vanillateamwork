@@ -14,9 +14,11 @@ var burndown = {
 
     start: function(method) {
 
+        burndown.week = $('.js-burndown.is-burndown').first().data('burndownid');
+        console.log('burndown week: '+burndown.week);
+
         // Active
-        burndown.week = $('.js-burndown.is-burndown').first().data('week');
-        active.start('burndown', '/burndown/' + method + '.json/' + burndown.week);
+        active.start('burndown', '/burndown/burndowndata.json/' + burndown.week, 120, true);
 
         // Charts
         jQuery('.js-burndown.is-burndown .is-chart').each(function(i, element) {
@@ -38,6 +40,9 @@ var burndown = {
 
             burndown.analytics.push(burndownanalytics);
         });
+
+        // Force refresh
+        active.refresh();
 
     },
 

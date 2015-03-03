@@ -112,4 +112,25 @@
 
     }
 
+    .worker-completion {
+        .worker {
+            margin: 2px 0px;
+
+            .worker-name {
+                font-size: 12px;
+                font-weight: bold;
+                display: inline-block;
+                min-width: 90px;
+            }
+
+            .completed-hours {
+                color: $highlightText;
+            }
+
+            .completed-ratio {
+                color: $highlightText;
+            }
+        }
+    }
+
 }
