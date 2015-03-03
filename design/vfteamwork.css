@@ -79,8 +79,8 @@
   top: 1px;
   right: 0px;
   width: 190px;
-  opacity: 0.8;
   margin: 0px;
+  background: RGBA(5, 31, 51, 0.5);
 }
 .burndown.overview .section.worker-completion .worker {
   margin: 2px 0px;
