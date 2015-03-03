@@ -2,6 +2,7 @@
 .burndown.overview {
   padding: 0px;
   margin: 20px 0px;
+  position: relative;
 }
 .burndown.overview .is-chart.burndown {
   margin: 25px 0px;
@@ -73,18 +74,26 @@
   color: #67b6ff;
   font-size: 11px;
 }
-.burndown.overview .worker-completion .worker {
+.burndown.overview .section.worker-completion {
+  position: absolute;
+  top: 1px;
+  right: 0px;
+  width: 190px;
+  opacity: 0.8;
+  margin: 0px;
+}
+.burndown.overview .section.worker-completion .worker {
   margin: 2px 0px;
 }
-.burndown.overview .worker-completion .worker .worker-name {
+.burndown.overview .section.worker-completion .worker .worker-name {
   font-size: 12px;
   font-weight: bold;
   display: inline-block;
   min-width: 90px;
 }
-.burndown.overview .worker-completion .worker .completed-hours {
+.burndown.overview .section.worker-completion .worker .completed-hours {
   color: #67b6ff;
 }
-.burndown.overview .worker-completion .worker .completed-ratio {
+.burndown.overview .section.worker-completion .worker .completed-ratio {
   color: #67b6ff;
 }

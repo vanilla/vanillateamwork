@@ -5,6 +5,7 @@
 .burndown.overview {
     padding: 0px;
     margin: 20px 0px;
+    position: relative;
 
     .is-chart.burndown {
         margin: 25px 0px;
@@ -112,7 +113,14 @@
 
     }
 
-    .worker-completion {
+    .section.worker-completion {
+        position: absolute;
+        top: 1px;
+        right: 0px;
+        width: 190px;
+        opacity: 0.8;
+        margin: 0px;
+
         .worker {
             margin: 2px 0px;
 
