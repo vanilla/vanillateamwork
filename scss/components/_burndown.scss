@@ -2,6 +2,10 @@
 // View Cluster Traffic
 //
 
+.vfteamwork.Burndown.display #Head .Row {
+    display: none;
+}
+
 .burndown.overview {
     padding: 0px;
     margin: 20px 0px;
