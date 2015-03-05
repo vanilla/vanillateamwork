@@ -95,7 +95,6 @@ class BurndownController extends VanillaConsoleController {
      * @param string $week optional
      */
     public function display($week = null) {
-        $this->Head->addString($cssOverride);
         $this->View = 'overview';
         $this->overview($week);
     }
