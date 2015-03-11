@@ -2,20 +2,6 @@
 // View Cluster Traffic
 //
 
-.vfteamwork.Burndown.display {
-    #Head .Row {
-        display: none;
-    }
-
-    #Frame > div .Row {
-        padding: 0px 10px;
-    }
-
-    #Body {
-        padding-bottom: 10px;
-    }
-}
-
 .burndown.overview {
     padding: 0px;
     margin: 20px 0px;
@@ -26,7 +12,7 @@
         border-top: 1px solid $sectionBorder;
 
         .chart {
-            height: 1000px;
+            height: 700px;
         }
 
         .info {
@@ -155,4 +141,31 @@
         }
     }
 
+}
+
+
+.vfteamwork.Burndown.display {
+    #Head .Row {
+        display: none;
+    }
+
+    #Frame > div .Row {
+        padding: 0px 10px;
+    }
+
+    #Body {
+        padding-bottom: 10px;
+    }
+
+    .burndown.overview {
+        margin-bottom: 0px;
+
+        .is-chart {
+            margin-bottom: 0px;
+
+            .chart {
+                height: 1000px;
+            }
+        }
+    }
 }

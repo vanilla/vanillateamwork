@@ -1,14 +1,4 @@
 /* No files to import found in globals/* */
-.vfteamwork.Burndown.display #Head .Row {
-  display: none;
-}
-.vfteamwork.Burndown.display #Frame > div .Row {
-  padding: 0px 10px;
-}
-.vfteamwork.Burndown.display #Body {
-  padding-bottom: 10px;
-}
-
 .burndown.overview {
   padding: 0px;
   margin: 20px 0px;
@@ -19,7 +9,7 @@
   border-top: 1px solid #346490;
 }
 .burndown.overview .is-chart.burndown .chart {
-  height: 1000px;
+  height: 700px;
 }
 .burndown.overview .is-chart.burndown .info .series.series-option-ratio .value {
   font-size: 30px;
@@ -106,4 +96,23 @@
 }
 .burndown.overview .section.worker-completion .worker .completed-ratio {
   color: #67b6ff;
+}
+
+.vfteamwork.Burndown.display #Head .Row {
+  display: none;
+}
+.vfteamwork.Burndown.display #Frame > div .Row {
+  padding: 0px 10px;
+}
+.vfteamwork.Burndown.display #Body {
+  padding-bottom: 10px;
+}
+.vfteamwork.Burndown.display .burndown.overview {
+  margin-bottom: 0px;
+}
+.vfteamwork.Burndown.display .burndown.overview .is-chart {
+  margin-bottom: 0px;
+}
+.vfteamwork.Burndown.display .burndown.overview .is-chart .chart {
+  height: 1000px;
 }
