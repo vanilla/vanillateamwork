@@ -2,6 +2,12 @@
 .vfteamwork.Burndown.display #Head .Row {
   display: none;
 }
+.vfteamwork.Burndown.display #Frame > div .Row {
+  padding: 0px;
+}
+.vfteamwork.Burndown.display #Body {
+  padding: 0px;
+}
 
 .burndown.overview {
   padding: 0px;

@@ -2,8 +2,18 @@
 // View Cluster Traffic
 //
 
-.vfteamwork.Burndown.display #Head .Row {
-    display: none;
+.vfteamwork.Burndown.display {
+    #Head .Row {
+        display: none;
+    }
+
+    #Frame > div .Row {
+        padding: 0px;
+    }
+
+    #Body {
+        padding: 0px;
+    }
 }
 
 .burndown.overview {
