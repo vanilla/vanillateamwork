@@ -13,7 +13,7 @@
   border-top: 1px solid #346490;
 }
 .burndown.overview .is-chart.burndown .chart {
-  height: 600px;
+  height: 900px;
 }
 .burndown.overview .is-chart.burndown .info .series.series-option-ratio .value {
   font-size: 30px;
