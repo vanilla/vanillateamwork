@@ -8,11 +8,11 @@
     }
 
     #Frame > div .Row {
-        padding: 0px;
+        padding: 0px 10px;
     }
 
     #Body {
-        padding: 0px;
+        padding-bottom: 10px;
     }
 }
 
@@ -26,7 +26,7 @@
         border-top: 1px solid $sectionBorder;
 
         .chart {
-            height: 900px;
+            height: 1000px;
         }
 
         .info {
