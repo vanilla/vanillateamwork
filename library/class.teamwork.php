@@ -475,23 +475,27 @@ class Teamwork {
      * @param array $task
      */
     public static function addWorker(&$burndown, $task) {
-        $workerID = $task['responsible-party-id'];
-        if (!array_key_exists($workerID, $burndown['workers'])) {
-            $burndown['workers'][$workerID] = [
-                'worker' => $task['responsible-party-summary'],
-                'worker-id' => $workerID,
-                'estimated-minutes' => 0,
-                'completed-minutes' => 0,
-                'tasks' => 0
-            ];
-        }
-        $worker = &$burndown['workers'][$workerID];
+        $responsibleParties = explode(',', $task['responsible-party-ids']);
+        $responsibleNames = explode('|', $task['responsible-party-names']);
+        $responsible = array_combine($responsibleParties, $responsibleNames);
+        foreach ($responsible as $workerID => $workerName) {
+            if (!array_key_exists($workerID, $burndown['workers'])) {
+                $burndown['workers'][$workerID] = [
+                    'worker' => $workerName,
+                    'worker-id' => $workerID,
+                    'estimated-minutes' => 0,
+                    'completed-minutes' => 0,
+                    'tasks' => 0
+                ];
+            }
+            $worker = &$burndown['workers'][$workerID];
 
-        $worker['tasks']++;
-        $worker['estimated-minutes'] += $task['estimated-minutes'];
+            $worker['tasks']++;
+            $worker['estimated-minutes'] += $task['estimated-minutes'];
 
-        if ($task['completed']) {
-            $worker['completed-minutes'] += $task['estimated-minutes'];
+            if ($task['completed']) {
+                $worker['completed-minutes'] += $task['estimated-minutes'];
+            }
         }
     }
 
