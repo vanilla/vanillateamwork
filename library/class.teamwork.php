@@ -478,6 +478,7 @@ class Teamwork {
         $responsibleParties = explode(',', $task['responsible-party-ids']);
         $responsibleNames = explode('|', $task['responsible-party-names']);
         $responsible = array_combine($responsibleParties, $responsibleNames);
+        $split = count($responsible);
         foreach ($responsible as $workerID => $workerName) {
             if (!array_key_exists($workerID, $burndown['workers'])) {
                 $burndown['workers'][$workerID] = [
@@ -491,10 +492,10 @@ class Teamwork {
             $worker = &$burndown['workers'][$workerID];
 
             $worker['tasks']++;
-            $worker['estimated-minutes'] += $task['estimated-minutes'];
+            $worker['estimated-minutes'] += $task['estimated-minutes'] / $split;
 
             if ($task['completed']) {
-                $worker['completed-minutes'] += $task['estimated-minutes'];
+                $worker['completed-minutes'] += $task['estimated-minutes'] / $split;
             }
         }
     }
