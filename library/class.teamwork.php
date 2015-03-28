@@ -475,6 +475,9 @@ class Teamwork {
      * @param array $task
      */
     public static function addWorker(&$burndown, $task) {
+        if (!array_key_exists('responsible-party-ids', $task)) {
+            return;
+        }
         $responsibleParties = explode(',', $task['responsible-party-ids']);
         $responsibleNames = explode('|', $task['responsible-party-names']);
         $responsible = array_combine($responsibleParties, $responsibleNames);
