@@ -265,7 +265,7 @@ class BurndownController extends VanillaConsoleController {
 
         // Get worker whitelist.
         // We need to do this again here to eliminate folks who slipped in on joint tasks.
-        $validWorkers = explode(',', c('teamwork.workers', array()));
+        $validWorkers = explode(',', c('teamwork.workers'));
 
         // Attach worker events
         $workers = [];
