@@ -230,6 +230,9 @@ class Teamwork {
 
         $tt = Teamwork::tearTasks($startDate, $endDate, true, $fresh);
 
+        // Get worker whitelist.
+        $validWorkers = explode(',', c('teamwork.workers', array()));
+
         // Prepare data structure
         $burndown = [
             'startdate' => $startDate->format('Y-m-d'),
@@ -289,6 +292,14 @@ class Teamwork {
 
             // Task is not due this week
             if ($taskDueKey > $endDayKey) {
+                continue;
+            }
+
+            // Skip workers not in our whitelist.
+            // Current logic allows in any task that has at least 1 whitelisted user.
+            // This means the graph and user totals won't necessarily perfectly align which is probably fine.
+            $responsibleParties = explode(',', $task['responsible-party-ids']);
+            if (count($validWorkers) && !count(array_intersect($responsibleParties, $validWorkers))) {
                 continue;
             }
 
