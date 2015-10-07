@@ -231,7 +231,7 @@ class Teamwork {
         $tt = Teamwork::tearTasks($startDate, $endDate, true, $fresh);
 
         // Get worker whitelist.
-        $validWorkers = explode(',', c('teamwork.workers'));
+        $validWorkers = explode(',', c('Teamwork.Workers'));
 
         // Prepare data structure
         $burndown = [
