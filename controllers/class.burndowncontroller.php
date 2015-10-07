@@ -263,10 +263,18 @@ class BurndownController extends VanillaConsoleController {
             'series' => $burndown['events']
         ]);
 
-        // Attach worker events
+        // Get worker whitelist.
+        // We need to do this again here to eliminate folks who slipped in on joint tasks.
+        $validWorkers = explode(',', c('Teamwork.Workers'));
 
+        // Attach worker events
         $workers = [];
         foreach ($burndown['workers'] as $workerID => $worker) {
+            // Skip workers not in our whitelist.
+            if (count($validWorkers) && !in_array($workerID, $validWorkers)) {
+                continue;
+            }
+
             $worker['estimated'] = round($worker['estimated-minutes'] / 60,1);
             $worker['completed'] = round($worker['completed-minutes'] / 60,1);
 
