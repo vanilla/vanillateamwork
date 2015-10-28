@@ -289,18 +289,16 @@ class BurndownController extends VanillaConsoleController {
     }
 
     /**
-     * Reset stored data for current week
-     *
+     * Reset stored data for current week.
      */
     public function reset() {
         $this->deliveryMethod(DELIVERY_METHOD_JSON);
-        $this->deliveryType(DELIVERY_TYPE_DATA);
+        $this->deliveryType(DELIVERY_TYPE_BOOL);
 
         // Check if we're current
         $refreshingMutexKey = 'teamwork.burndown.refreshing';
         $refreshing = Gdn::cache()->get($refreshingMutexKey);
         if (!$refreshing) {
-
             // Wait 300 seconds
             Gdn::cache()->store($refreshingMutexKey, true, [
                 Gdn_Cache::FEATURE_EXPIRY => 300
@@ -312,10 +310,8 @@ class BurndownController extends VanillaConsoleController {
 
             // Shortcircuit refresh wait if successful completion
             Gdn::cache()->remove($refreshingMutexKey);
-
         }
 
         $this->render();
     }
-
 }
