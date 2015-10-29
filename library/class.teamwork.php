@@ -336,6 +336,11 @@ class Teamwork {
 
             // Task is a scope increase
             if ($taskStartKey > $startDayKey) {
+                // If we've hit the weekend, just do the math against Friday.
+                if (!isset($burndown['days'][$taskStartKey])) {
+                    $last = array_slice($burndown['days'], -1);
+                    $taskStartKey = $last['key'];
+                }
                 $burndown['days'][$taskStartKey]['ideal']['spike-minutes'] += $task['estimated-minutes'];
                 $burndown['spike-minutes'] += $task['estimated-minutes'];
 
