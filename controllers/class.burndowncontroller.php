@@ -78,8 +78,7 @@ class BurndownController extends VanillaConsoleController {
         $this->addCssFile('/resources/css/vanillicon.css');
 
         // Add Mustache templates for js usage
-        $this->addTemplateFile('viewburndown');
-        $this->addTemplateFile('viewcompletion');
+        MustachePlugin::addPartial('viewcompletion');
 
         $this->addJsFile('burndown/burndown.js');
 

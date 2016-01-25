@@ -7,10 +7,10 @@
     <div class="burndown overview js-burndown is-burndown is-active-entity" data-burndownid="<?php echo $week; ?>">
 
         <!-- analytics -->
-        <?php echo $this->mustache('viewburndown'); ?>
+        <?php echo $this->mustache('_partials/viewburndown'); ?>
 
         <!-- completion -->
-        <?php echo $this->mustache('viewcompletion'); ?>
+        <?php echo $this->mustache('_partials/viewcompletion'); ?>
 
         <!-- /burndown -->
     </div>
