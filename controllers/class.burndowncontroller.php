@@ -85,6 +85,9 @@ class BurndownController extends VanillaConsoleController {
         $burndown = Teamwork::getBurndown($week);
         $this->setData('burndown', $burndown);
 
+        // Prepare the sprint progress for each workers
+        $this->setData('workers-progress', $this->computeWorkersProgress($burndown));
+
         $this->render();
     }
 
@@ -262,27 +265,8 @@ class BurndownController extends VanillaConsoleController {
             'series' => $burndown['events']
         ]);
 
-        // Get worker whitelist.
-        // We need to do this again here to eliminate folks who slipped in on joint tasks.
-        $validWorkers = explode(',', c('Teamwork.Workers'));
-
-        // Attach worker events
-        $workers = [];
-        foreach ($burndown['workers'] as $workerID => $worker) {
-            // Skip workers not in our whitelist.
-            if (count($validWorkers) && !in_array($workerID, $validWorkers)) {
-                continue;
-            }
-
-            $worker['estimated'] = round($worker['estimated-minutes'] / 60,1);
-            $worker['completed'] = round($worker['completed-minutes'] / 60,1);
-
-            $worker['estimated-text'] = $worker['estimated'] == 1 ? 'hour' : 'hours';
-            $worker['completed-text'] = $worker['completed'] == 1 ? 'hour' : 'hours';
-            $worker['ratio'] = round(($worker['completed'] / $worker['estimated']) * 100,0);
-            $workers[] = $worker;
-        }
-        $this->setData('workers', $workers);
+        // Prepare the sprint progress for each workers
+        $this->setData('workers-progress', $this->computeWorkersProgress($burndown));
 
         $this->render();
     }
@@ -313,4 +297,35 @@ class BurndownController extends VanillaConsoleController {
 
         $this->render();
     }
+
+    /**
+     * Prepare the sprint progress for each workers.
+     *
+     * @param array $burndown The array representing the burndown
+     * @return array An array of sprint progress for each workers
+     */
+    private function computeWorkersProgress($burndown) {
+        // Get worker whitelist.
+        // We need to do this again here to eliminate folks who slipped in on joint tasks.
+        $validWorkers = explode(',', c('Teamwork.Workers'));
+
+        // Attach worker events
+        $workers = [];
+        foreach ($burndown['workers'] as $workerID => $worker) {
+            // Skip workers not in our whitelist.
+            if (count($validWorkers) && !in_array($workerID, $validWorkers)) {
+                continue;
+            }
+
+            $worker['estimated'] = round($worker['estimated-minutes'] / 60,1);
+            $worker['completed'] = round($worker['completed-minutes'] / 60,1);
+
+            $worker['estimated-text'] = $worker['estimated'] == 1 ? 'hour' : 'hours';
+            $worker['completed-text'] = $worker['completed'] == 1 ? 'hour' : 'hours';
+            $worker['ratio'] = round(($worker['completed'] / $worker['estimated']) * 100,0);
+            $workers[] = $worker;
+        }
+        return $workers;
+    }
+
 }
