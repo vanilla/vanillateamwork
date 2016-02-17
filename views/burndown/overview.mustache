@@ -1,0 +1,29 @@
+{{#burndown}}
+
+    <div class="burndown overview js-burndown is-burndown is-active-entity" data-burndownid="{{startdate}}">
+
+        <!-- analytics -->
+        {{> viewburndown}}
+
+        <!-- completion -->
+        {{> viewcompletion}}
+
+        <!-- /burndown -->
+    </div>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            burndown.start('overview');
+        });
+    </script>
+
+{{/burndown}}
+
+{{^burndown}}
+
+    <h1>view burndown</h1>
+    <div class="context">
+        no data
+    </div>
+
+{{/burndown}}
