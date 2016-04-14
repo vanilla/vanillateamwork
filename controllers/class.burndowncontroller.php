@@ -61,8 +61,9 @@ class BurndownController extends VanillaConsoleController {
         $this->title('Burndown');
 
         // Add vfconsole js libaries
+        $this->addJsFile('jquery.dial.js', 'vfconsole');
         $this->addJsFile('active.js', 'vfconsole');
-        $this->addJsFile('activebar.js', 'vfconsole');
+        $this->addJsFile('activedial.js', 'vfconsole');
         $this->addJsFile('graphing.js', 'vfconsole');
         $this->addJsFile('analytics.js', 'vfconsole');
 
