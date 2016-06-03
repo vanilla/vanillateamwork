@@ -77,130 +77,86 @@ var burndown = {
         return realTplName;
     },
 
+    // C3JS templates
     templates: {
 
         // Burndown
-
         "teamwork/burndown": {
-            base: "bluePrecision",
-            tooltips: function(env, series, index, value, label) {
+            base: false,
+            point: {
+                show: false
+            },
+            padding: {
+              left: 20,
+              top: -6,
+              right: 0
+            }      ,
+            data: {
+                x: 'x',
+                columns: [],
+                type: 'area',
+                colors: {
+                    burndownSeries: '#67b6ff',
+                    todaySeries: '#ff9c3b'
+                },
+                color: function(color, dataSerie) {
+                    var definedSeries = ['burndownSeries', 'todaySeries'];
+                    if (definedSeries.indexOf(dataSerie.id) === -1) {
+                        // All other series will get this default color
+                        return '#88ee88';
+                    }
 
-                var eventKey = env.analytics.data.events.keys[index];
-                if (!env.analytics.data.events.series.hasOwnProperty(eventKey)) {
-                    env.analytics.widget.find('.scope-tooltips').html('');
-                    return null;
+                    // 'burndownSeries', 'todaySeries' and already defined in "data.colors"
+                    return color;
+                },
+                types: {
+                    burndownSeries: 'line',
+                    todaySeries: 'line'
                 }
-
-                var events = env.analytics.data.events.series[eventKey];
-                var eventDate = events.date;
-                var eventList = '';
-
-                var totalHours = 0;
-                jQuery.each(events.events, function(projectid, project){
-                    var hours = Math.round(project.minutes / 60,1);
-                    totalHours += hours;
-                    var hoursText = (hours === 1) ? 'hour' : 'hours';
-                    eventList += "<div class=\"event\">\n\
-    <span class=\"project-name\">"+project.project+"</span> (<span class=\"project-info\"><span class=\"project-hours\">"+hours+" "+hoursText+"</span></span>)\
-</div>";
-                });
-
-                var totalHoursText = totalHours === 1 ? 'hour' : 'hours';
-                var tooltiptext = "<div class=\"chart-tooltip scope-events\">\n\
-    <div class=\"tooltip-title\">scope increases</div>\n\
-    <div class=\"date\">" + eventDate + "</div>\n\
-    <div class=\"events\">\
-        {events}\
-    </div>\
-    <div class=\"scope-summary\">\
-        Total: <span class=\"summary-hours\">"+totalHours+" "+totalHoursText+"</span>\
-    </div>\
-</div>";
-
-                env.analytics.widget.find('.scope-tooltips').html(tooltiptext.replace('{events}', eventList));
-
-                return null;
+            },
+            legend: {
+                show: false
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
             },
             axis: {
                 x: {
-                    labelsFormatHandler: function(label, index) {
-                        return label;
-                    }
-                },
-                l: {
-                    labelsDistance: -10,
-                    labelsProps: {
-                        fill: "white",
-                        "font-size": "11px",
-                        "font-weight": "bold"
-                    }
-                },
-                floating: {
-                    labels: false
-                }
-            },
-            defaultSeries: {
-                color: "#88ee88",
-                fill: true,
-                hideNulls: true,
-                plotProps: {
-                    opacity: 1,
-                    "stroke-width": 1,
-                    stroke: "#88ee88"
-                },
-                dotProps: {
-                    stroke: "white",
-                    size: 0,
-                    "stroke-width": 0
-                },
-                tooltip: {
-                    height: 300,
-                    width: 180,
-                    padding: 0,
-                    roundedCorners: 0,
-                    frameProps: {
-                        opacity: 1,
-                        fill: null,
-                        stroke: "#ffffff",
-                        "stroke-width": 0
-                    }
-                }
-            },
-            series: {
-                burndownSeries: {
-                    color: "#67b6ff",
-                    fill: false,
-                    axis: 'l',
-                    plotProps: {
-                        "stroke-width": 4,
-                        stroke: "#67b6ff"
+                    padding: {
+                        left: 0,
+                        right: 0
                     },
-                    tooltip: null
-                },
-                todaySeries: {
-                    color: "#ff9c3b",
-                    fill: false,
-                    axis: 'l',
-                    plotProps: {
-                        stroke: "#ff9c3b",
-                        "stroke-width": 4,
-                        "stroke-dasharray": '.'
-                    },
-                    tooltip: null
-                }
-            },
-            features: {
-                tooltip: {
-                    positionHandler: function(env, tooltipConf, mouseAreaData, suggestedX, suggestedY) {
-                        return [-180,300];
+                    tick: {
+                        outer: false, // Removes the outer ticks at the beginning and end of the axis
+                        format: function(index) {
+                            // NOTE: The context "this" refers to "c3.chart.internal"
+                            var label = this.getXTickLabel(index);
+                            return label ? label : index;
+                        }
                     }
                 },
-                grid: {
-                    forceBorder: [false, false, true, true],
-                    nx: 5,
-                    ny: 6,
-                    props: {
-                        stroke: "#346490"
+                y: {
+                    padding: {
+                        bottom: 0
+                    },
+                    min: 0,
+                    inner: true,
+                    tick: {
+                        outer: false,
+                        count: 7,
+                        format: function(x) {
+                            // Do not show the first tick at 0 since
+                            // we display the tick values lower a bit
+                            if (x === 0) {
+                                return '';
+                            }
+                            return String(Math.ceil(x)).addCommas();
+                        }
                     }
                 }
             }
