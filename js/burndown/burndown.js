@@ -15,7 +15,6 @@ var burndown = {
     start: function(method) {
 
         burndown.week = $('.js-burndown.is-burndown').first().data('burndownid');
-        console.log('burndown week: '+burndown.week);
 
         // Active
         active.start('burndown', '/burndown/burndowndata.json/' + burndown.week, 120, true);
@@ -123,6 +122,53 @@ var burndown = {
                 },
                 y: {
                     show: true
+                }
+            },
+            tooltip: {
+                contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+                    // NOTE: The context "this" refers to "c3.chart.internal"
+
+                    if (!d.length) {
+                        return null;
+                    }
+                    var index = d[0].x;
+
+                    var data = this.getExtra('data');
+                    var eventKey = data.events.keys[index];
+                    if (!data.events.series.hasOwnProperty(eventKey)) {
+                        jQuery('.scope-tooltips').html('');
+                        return null;
+                    }
+
+                    var events = data.events.series[eventKey];
+                    var eventDate = events.date;
+                    var eventList = '';
+
+                    var totalHours = 0;
+                    jQuery.each(events.events, function(projectid, project){
+                        var hours = Math.round(project.minutes / 60,1);
+                        totalHours += hours;
+                        var hoursText = (hours === 1) ? 'hour' : 'hours';
+                        eventList += "<div class=\"event\">\n\
+        <span class=\"project-name\">"+project.project+"</span> (<span class=\"project-info\"><span class=\"project-hours\">"+hours+" "+hoursText+"</span></span>)\
+    </div>";
+                    });
+
+                    var totalHoursText = totalHours === 1 ? 'hour' : 'hours';
+                    var tooltiptext = "<div class=\"chart-tooltip scope-events\">\n\
+        <div class=\"tooltip-title\">scope increases</div>\n\
+        <div class=\"date\">" + eventDate + "</div>\n\
+        <div class=\"events\">\
+            {events}\
+        </div>\
+        <div class=\"scope-summary\">\
+            Total: <span class=\"summary-hours\">"+totalHours+" "+totalHoursText+"</span>\
+        </div>\
+    </div>";
+
+                    jQuery('.scope-tooltips').html(tooltiptext.replace('{events}', eventList));
+
+                    return null;
                 }
             },
             axis: {
