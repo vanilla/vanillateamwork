@@ -27,6 +27,7 @@ var burndown = {
             var chartoptions = {};
             chartoptions.tag = widget.data('tag') || false;
             chartoptions.url = gdn.url(widget.data('url'));
+            chartoptions.autounload = true;
             chartoptions.refresh = widget.data('refresh') || false;
             if (chartoptions.refresh) {
                 chartoptions.interval = parseInt(widget.data('interval')) || 30;
