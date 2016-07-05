@@ -11,6 +11,44 @@
         margin: 25px 0px;
         border-top: 1px solid $sectionBorder;
 
+        ///////////////////////////
+        // C3 customization
+        ///////////////////////////
+
+        .c3-target-burndownSeries .c3-line {
+            stroke-width: 4;
+        }
+
+        .c3-target-todaySeries .c3-line {
+            stroke-width: 4;
+            stroke-dasharray: 4,4;
+        }
+
+        .c3-area {
+            opacity: 0.3;
+        }
+
+        .c3-axis-x .tick {
+            font-size: 10px;
+        }
+
+        .c3-axis-y .tick {
+            font-size: 11px;
+            font-weight: bold;
+
+            text {
+                transform: translate(0,13px);
+            }
+        }
+
+        .c3-axis.c3-axis-y .domain {
+            display: block;
+        }
+
+        ///////////////////////////
+        // end of C3 customization
+        ///////////////////////////
+
         .chart {
             height: 700px;
         }
