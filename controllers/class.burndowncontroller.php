@@ -60,9 +60,16 @@ class BurndownController extends VanillaConsoleController {
         $this->addBreadcrumb('Burndown');
         $this->title('Burndown');
 
+        // Add default CSS for C3JS
+        $this->addCssFile('../js/c3/c3.css', 'vfconsole');
+
         // Add vfconsole js libaries
+        $this->addJsFile('jquery.dial.js', 'vfconsole');
         $this->addJsFile('active.js', 'vfconsole');
-        $this->addJsFile('activebar.js', 'vfconsole');
+        $this->addJsFile('activedial.js', 'vfconsole');
+        $this->addJsFile('d3/d3.min.js', 'vfconsole');
+        $this->addJsFile('c3/c3.min.js', 'vfconsole');
+        $this->addJsFile('c3overrides.js', 'vfconsole');
         $this->addJsFile('graphing.js', 'vfconsole');
         $this->addJsFile('analytics.js', 'vfconsole');
 

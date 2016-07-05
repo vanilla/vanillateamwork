@@ -8,6 +8,29 @@
   margin: 25px 0px;
   border-top: 1px solid #346490;
 }
+.burndown.overview .is-chart.burndown .c3-target-burndownSeries .c3-line {
+  stroke-width: 4;
+}
+.burndown.overview .is-chart.burndown .c3-target-todaySeries .c3-line {
+  stroke-width: 4;
+  stroke-dasharray: 4,4;
+}
+.burndown.overview .is-chart.burndown .c3-area {
+  opacity: 0.3;
+}
+.burndown.overview .is-chart.burndown .c3-axis-x .tick {
+  font-size: 10px;
+}
+.burndown.overview .is-chart.burndown .c3-axis-y .tick {
+  font-size: 11px;
+  font-weight: bold;
+}
+.burndown.overview .is-chart.burndown .c3-axis-y .tick text {
+  transform: translate(0, 13px);
+}
+.burndown.overview .is-chart.burndown .c3-axis.c3-axis-y .domain {
+  display: block;
+}
 .burndown.overview .is-chart.burndown .chart {
   height: 700px;
 }
