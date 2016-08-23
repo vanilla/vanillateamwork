@@ -308,7 +308,7 @@ class Teamwork {
 
             if ($task['completed']) {
                 $taskCompletedDate = Teamwork::time($task['completed_on']);
-                $taskCompletedKey = $taskCompletedDate->format('Ymd');
+                $taskCompletedKey = $taskCompletedDate->setTimezone(new DateTimeZone('America/New_York'))->format('Ymd');
 
                 // Task was completed in a previous sprint
                 if ($taskCompletedDate < $startDate) {
