@@ -188,6 +188,14 @@ class Teamwork {
 
         if ($completed) {
             $request->parameter('includeCompletedTasks', true);
+
+            // Without the parameter "ignore-start-dates", the API started returning a list unfiltered by the specified dates.
+            // All completed tasks had a "start_date" prior to interval selected and an empty "due-date".
+            // All incomplete tasks had an empty "start_date" and a valid "due-date" in the interval selected.
+            //
+            // Setting the request parameter "ignore-start-dates" to true appears to solve this issue.
+            // Now the list of completed and incomplete tasks have the same characteristics which is, they have an empty "start_date" and a valid "due-date".
+            $request->parameter('ignore-start-dates', true);
         }
 
         $request->cache(3600);
