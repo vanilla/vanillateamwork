@@ -10,7 +10,7 @@
  * 86932 - Patrick
  * 90864 - Alex
  * 94042 - Stéphane
- * 81407 - Julie
  * 88840 - Matthew
+ * 104450 - Francis
  */
-$Configuration['Teamwork']['Workers'] = '48324,79339,84758,86932,90864,94042';
+$Configuration['Teamwork']['Workers'] = '86932,94042,104450';
