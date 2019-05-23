@@ -28,7 +28,8 @@ $ApplicationInfo['vfteamwork'] = [
     'AuthorUrl' => 'http://about.me/timgunter',
     'License' => 'Proprietary',
     'RequiredApplications' => [
-        'vfconsole' => '2.6'
+        'vfconsole' => '2.6',
+        'mustache' => '1.1'
     ],
     'RegisterPermissions' => [
         'vfteamwork.burndown.view',

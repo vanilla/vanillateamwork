@@ -40,3 +40,10 @@ $permissionModel->define([
     'vfteamwork.burndown.view' => 0,
     'vfteamwork.burndown.manage' => 0
 ]);
+
+// delete configuration.php
+if (file_exists(__DIR__.'/configuration.php')) {
+    if (!unlink(__DIR__.'/configuration.php')) {
+        throw new \Exception("Couldn't delete `vfteamwork::configuration.php`", 500);
+    }
+};
